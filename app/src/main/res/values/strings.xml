@@ -9,4 +9,9 @@
         <item>French Ligue 1</item>
         <item>Spanish La Liga</item>
     </array>
+
+    <array name="event_type">
+        <item>Previous Match</item>
+        <item>Next Match</item>
+    </array>
 </resources>
