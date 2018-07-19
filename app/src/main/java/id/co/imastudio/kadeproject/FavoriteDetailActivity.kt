@@ -14,7 +14,6 @@ import id.co.imastudio.kadeproject.api.ApiRepository
 import id.co.imastudio.kadeproject.api.TheSportDBApi
 import id.co.imastudio.kadeproject.database.Favorite
 import id.co.imastudio.kadeproject.database.database
-import id.co.imastudio.kadeproject.model.EventsItem
 import id.co.imastudio.kadeproject.model.TeamResponse
 import kotlinx.android.synthetic.main.activity_match_detail.*
 import org.jetbrains.anko.db.classParser
@@ -25,7 +24,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class MatchDetailActivity : AppCompatActivity() {
+class FavoriteDetailActivity : AppCompatActivity() {
 
     private lateinit var favorite: Favorite
 
@@ -38,7 +37,7 @@ class MatchDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_detail)
 
-        var dataMatch: List<EventsItem> = intent.getParcelableArrayListExtra("data")
+        var dataMatch: List<Favorite> = intent.getParcelableArrayListExtra("data")
         var posisi = intent.getIntExtra("posisi", 0)
 
         var idHomeTeam = dataMatch[posisi].idHomeTeam
@@ -84,7 +83,7 @@ class MatchDetailActivity : AppCompatActivity() {
                 dataAwayRed,
                 dataIdHome,
                 dataIdAway
-        )
+                )
 
         detail_match_time.text = dataEventDate
 
@@ -130,10 +129,12 @@ class MatchDetailActivity : AppCompatActivity() {
     }
 
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.detail_menu, menu)
         menuItem = menu
         setFavorite()
+
         return true
     }
 
@@ -157,44 +158,44 @@ class MatchDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun addToFavorite() {
+    private fun addToFavorite(){
         try {
             database.use {
                 insert(Favorite.TABLE_FAVORITE,
-                        Favorite.EVENT_ID to favorite.idEvent,
-                        Favorite.EVENT_ID to favorite.idEvent,
-                        Favorite.EVENT_DATE to favorite.dateEvent,
-                        Favorite.HOME_TEAM to favorite.strHomeTeam,
-                        Favorite.AWAY_TEAM to favorite.strAwayTeam,
-                        Favorite.HOME_SCORE to favorite.intHomeScore,
-                        Favorite.AWAY_SCORE to favorite.intAwayScore,
-                        Favorite.HOME_SHOTS to favorite.intHomeShots,
-                        Favorite.AWAY_SHOTS to favorite.intAwayShots,
-                        Favorite.HOME_GOAL to favorite.strHomeGoalDetails,
-                        Favorite.AWAY_GOAL to favorite.strAwayGoalDetails,
-                        Favorite.HOME_YELLOW to favorite.strHomeYellowCards,
-                        Favorite.AWAY_YELLOW to favorite.strAwayYellowCards,
-                        Favorite.HOME_RED to favorite.strHomeRedCards,
-                        Favorite.AWAY_RED to favorite.strAwayRedCards,
-                        Favorite.ID_HOME to favorite.idHomeTeam,
-                        Favorite.ID_AWAY to favorite.idAwayTeam
+                            Favorite.EVENT_ID to favorite.idEvent,
+                            Favorite.EVENT_ID to favorite.idEvent,
+                            Favorite.EVENT_DATE to favorite.dateEvent,
+                            Favorite.HOME_TEAM to favorite.strHomeTeam,
+                            Favorite.AWAY_TEAM to favorite.strAwayTeam,
+                            Favorite.HOME_SCORE to favorite.intHomeScore,
+                            Favorite.AWAY_SCORE to favorite.intAwayScore,
+                            Favorite.HOME_SHOTS to favorite.intHomeShots,
+                            Favorite.AWAY_SHOTS to favorite.intAwayShots,
+                            Favorite.HOME_GOAL to favorite.strHomeGoalDetails,
+                            Favorite.AWAY_GOAL to favorite.strAwayGoalDetails,
+                            Favorite.HOME_YELLOW to favorite.strHomeYellowCards,
+                            Favorite.AWAY_YELLOW to favorite.strAwayYellowCards,
+                            Favorite.HOME_RED to favorite.strHomeRedCards,
+                            Favorite.AWAY_RED to favorite.strAwayRedCards,
+                            Favorite.ID_HOME to favorite.idHomeTeam,
+                            Favorite.ID_AWAY to favorite.idAwayTeam
 
                 )
             }
             toast("Added to favorite").show()
-        } catch (e: SQLiteConstraintException) {
+        } catch (e: SQLiteConstraintException){
             toast(e.localizedMessage).show()
         }
     }
 
-    private fun removeFromFavorite() {
+    private fun removeFromFavorite(){
         try {
             database.use {
-                delete(Favorite.TABLE_FAVORITE, "(EVENT_ID = {id})",
+                delete(Favorite.TABLE_FAVORITE, "(EVENT_ID = {id})", 
                         "id" to dataEventId)
             }
             toast("Removed to favorite").show()
-        } catch (e: SQLiteConstraintException) {
+        } catch (e: SQLiteConstraintException){
             toast(e.localizedMessage).show()
         }
     }
@@ -206,7 +207,7 @@ class MatchDetailActivity : AppCompatActivity() {
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_add_to_favorites)
     }
 
-    private fun favoriteState() {
+    private fun favoriteState(){
         database.use {
             val result = select(Favorite.TABLE_FAVORITE)
                     .whereArgs("(EVENT_ID = {id})",
