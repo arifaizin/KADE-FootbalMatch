@@ -38,11 +38,11 @@ class MatchDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_detail)
 
-        var dataMatch: List<EventsItem> = intent.getParcelableArrayListExtra("data")
-        var posisi = intent.getIntExtra("posisi", 0)
+        val dataMatch: List<EventsItem> = intent.getParcelableArrayListExtra("data")
+        val posisi = intent.getIntExtra("posisi", 0)
 
-        var idHomeTeam = dataMatch[posisi].idHomeTeam
-        var idAwayTeam = dataMatch[posisi].idAwayTeam
+        val idHomeTeam = dataMatch[posisi].idHomeTeam
+        val idAwayTeam = dataMatch[posisi].idAwayTeam
 
 
         val imgHome = detail_home_logo
@@ -52,21 +52,21 @@ class MatchDetailActivity : AppCompatActivity() {
         getBadge(idAwayTeam, imgAway)
 
         dataEventId = dataMatch[posisi].idEvent.toString()
-        var dataEventDate = dataMatch[posisi].dateEvent
-        var dataHomeTeam = dataMatch[posisi].strHomeTeam
-        var dataAwayTeam = dataMatch[posisi].strAwayTeam
-        var dataHomeScore = dataMatch[posisi].intHomeScore
-        var dataAwayScore = dataMatch[posisi].intAwayScore
-        var dataHomeShots = dataMatch[posisi].intHomeShots
-        var dataAwayShots = dataMatch[posisi].intAwayShots
-        var dataHomeGoal = dataMatch[posisi].strHomeGoalDetails?.replace(";".toRegex(), "\n")
-        var dataAwayGoal = dataMatch[posisi].strAwayGoalDetails?.replace(";".toRegex(), "\n")
-        var dataHomeYellow = dataMatch[posisi].strHomeYellowCards?.replace(";".toRegex(), "\n")
-        var dataAwayYellow = dataMatch[posisi].strAwayYellowCards?.replace(";".toRegex(), "\n")
-        var dataHomeRed = dataMatch[posisi].strHomeRedCards?.replace(";".toRegex(), "\n")
-        var dataAwayRed = dataMatch[posisi].strAwayRedCards?.replace(";".toRegex(), "\n")
-        var dataIdHome = dataMatch[posisi].idHomeTeam
-        var dataIdAway = dataMatch[posisi].idAwayTeam
+        val dataEventDate = dataMatch[posisi].dateEvent
+        val dataHomeTeam = dataMatch[posisi].strHomeTeam
+        val dataAwayTeam = dataMatch[posisi].strAwayTeam
+        val dataHomeScore = dataMatch[posisi].intHomeScore
+        val dataAwayScore = dataMatch[posisi].intAwayScore
+        val dataHomeShots = dataMatch[posisi].intHomeShots
+        val dataAwayShots = dataMatch[posisi].intAwayShots
+        val dataHomeGoal = dataMatch[posisi].strHomeGoalDetails?.replace(";".toRegex(), "\n")
+        val dataAwayGoal = dataMatch[posisi].strAwayGoalDetails?.replace(";".toRegex(), "\n")
+        val dataHomeYellow = dataMatch[posisi].strHomeYellowCards?.replace(";".toRegex(), "\n")
+        val dataAwayYellow = dataMatch[posisi].strAwayYellowCards?.replace(";".toRegex(), "\n")
+        val dataHomeRed = dataMatch[posisi].strHomeRedCards?.replace(";".toRegex(), "\n")
+        val dataAwayRed = dataMatch[posisi].strAwayRedCards?.replace(";".toRegex(), "\n")
+        val dataIdHome = dataMatch[posisi].idHomeTeam
+        val dataIdAway = dataMatch[posisi].idAwayTeam
 
         favorite = Favorite(1, dataEventId,
                 dataEventDate,
@@ -123,7 +123,7 @@ class MatchDetailActivity : AppCompatActivity() {
             )
 
             uiThread {
-                var linkBadge = data.teams.get(0).teamBadge
+                val linkBadge = data.teams[0].teamBadge
                 Picasso.get().load(linkBadge).into(imageView)
             }
         }
