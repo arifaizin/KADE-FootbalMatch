@@ -58,7 +58,8 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
                 relativeLayout {
                     lparams(width = matchParent, height = wrapContent)
 
-                    listTeam = recyclerView {
+                    listEvent = recyclerView {
+                        id = R.id.listEvent
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(ctx)
                     }
@@ -81,7 +82,7 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
 //        adapter.notifyDataSetChanged()
 //    }
 
-    private lateinit var listTeam: RecyclerView
+    private lateinit var listEvent: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
@@ -101,7 +102,7 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
         super.onActivityCreated(savedInstanceState)
         //set adapter
         adapterMatch = MatchAdapter(events);
-        listTeam.adapter = adapterMatch
+        listEvent.adapter = adapterMatch
 
         //get data
         val request = ApiRepository()

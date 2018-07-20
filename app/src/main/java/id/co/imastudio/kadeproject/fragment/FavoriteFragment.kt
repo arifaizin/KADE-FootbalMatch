@@ -50,7 +50,8 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context> {
                 relativeLayout {
                     lparams(width = matchParent, height = wrapContent)
 
-                    listTeam = recyclerView {
+                    listEvent = recyclerView {
+                        id = R.id.listEvent
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(ctx)
                     }
@@ -63,7 +64,7 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context> {
 
 
 
-    private lateinit var listTeam: RecyclerView
+    private lateinit var listEvent: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
@@ -78,7 +79,7 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context> {
         super.onActivityCreated(savedInstanceState)
         //set adapter
         adapter = FavoriteTeamsAdapter(favorites);
-        listTeam.adapter = adapter
+        listEvent.adapter = adapter
 
         showFavorite()
 

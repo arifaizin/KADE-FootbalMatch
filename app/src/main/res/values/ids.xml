@@ -7,4 +7,5 @@
     <item name="match_away_score" type="id" />
     <item name="match_away_team" type="id" />
     <item name="match_time" type="id" />
+    <item name="listEvent" type="id" />
 </resources>
