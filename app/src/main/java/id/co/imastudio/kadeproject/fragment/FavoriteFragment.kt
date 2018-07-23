@@ -11,11 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ProgressBar
-import id.co.imastudio.kadeproject.FavoriteTeamsAdapter
 import id.co.imastudio.kadeproject.R
 import id.co.imastudio.kadeproject.database.Favorite
 import id.co.imastudio.kadeproject.database.database
+import id.co.imastudio.kadeproject.favorite.FavoriteTeamsAdapter
 import org.jetbrains.anko.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
@@ -65,15 +64,11 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context> {
 
 
     private lateinit var listEvent: RecyclerView
-    private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private var favorites: MutableList<Favorite> = mutableListOf()
 
     private lateinit var adapter: FavoriteTeamsAdapter
-
-
-    private var posisi: Int = 0
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -82,7 +77,6 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context> {
         listEvent.adapter = adapter
 
         showFavorite()
-
 
         swipeRefresh.onRefresh {
             favorites.clear()

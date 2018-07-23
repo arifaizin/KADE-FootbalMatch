@@ -12,11 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.Spinner
 import com.google.gson.Gson
-import id.co.imastudio.kadeproject.*
+import id.co.imastudio.kadeproject.R
 import id.co.imastudio.kadeproject.api.ApiRepository
+import id.co.imastudio.kadeproject.home.HomePresenter
+import id.co.imastudio.kadeproject.home.HomeView
+import id.co.imastudio.kadeproject.home.MatchAdapter
 import id.co.imastudio.kadeproject.model.EventsItem
+import id.co.imastudio.kadeproject.utils.invisible
+import id.co.imastudio.kadeproject.utils.visible
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.ctx
@@ -32,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
+class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -74,29 +78,14 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
 
     }
 
-
-//    override fun showTeamList(data: List<Team>) {
-//        swipeRefresh.isRefreshing = false
-//        teams.clear()
-//        teams.addAll(data)
-//        adapter.notifyDataSetChanged()
-//    }
-
     private lateinit var listEvent: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
-    //    private var teams: MutableList<Team> = mutableListOf()
     private var events: MutableList<EventsItem> = mutableListOf()
 
-    private lateinit var presenter: MainPresenter
-    //    private lateinit var adapter: MainAdapter
+    private lateinit var presenter: HomePresenter
     private lateinit var adapterMatch: MatchAdapter
-
-    private lateinit var spinner: Spinner
-    private lateinit var leagueName: String
-
-    private var posisi: Int = 0
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -109,30 +98,14 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MainView {
         val gson = Gson()
 
         //init presenter
-        presenter = MainPresenter(this, request, gson)
-        presenter.getNextEvent(0)
+        presenter = HomePresenter(this, request, gson)
+        presenter.getPreviousEvent()
 
-//        //spinner
-////        val spinnerItems = resources.getStringArray(league)
-//        val spinnerItems = resources.getStringArray(R.array.event_type)
-//        val spinnerAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
-//        spinner.adapter = spinnerAdapter
-//
-//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-////                leagueName = spinner.selectedItem.toString()
-//                posisi = position
-//                presenter.getNextEvent(posisi)
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>) {}
-//        }
 
         swipeRefresh.onRefresh {
-            presenter.getNextEvent(posisi)
+            presenter.getPreviousEvent()
         }
     }
-
 
     //imp mainView
     override fun showMatchList(data: List<EventsItem>) {

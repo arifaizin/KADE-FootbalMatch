@@ -14,9 +14,9 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".MatchDetailActivity" />
+        <activity android:name=".home.MatchDetailActivity" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".home.HomeActivity"
             android:label="@string/title_activity_home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FavoriteDetailActivity" />
+        <activity android:name=".favorite.FavoriteDetailActivity" />
 
     </application>
 

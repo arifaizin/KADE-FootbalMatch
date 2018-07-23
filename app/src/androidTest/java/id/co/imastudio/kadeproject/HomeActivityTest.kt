@@ -10,6 +10,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import id.co.imastudio.kadeproject.R.id.*
+import id.co.imastudio.kadeproject.home.HomeActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
