@@ -1,14 +1,24 @@
 <resources>
     <string name="app_name">KadeProject</string>
 
-    <array name="event_type">
-        <item>Previous Match</item>
-        <item>Next Match</item>
+    <array name="league">
+        <item>English Premier League</item>
+        <item>English League Championship</item>
+        <item>Scottish Premier League"</item>
+        <item>German Bundesliga</item>
+        <item>Italian Serie A</item>
+        <item>French Ligue 1</item>
+        <item>Spanish La Liga</item>
     </array>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="prev_match">Prev. Match</string>
-    <string name="next_match">Next Match</string>
+
+    <string name="title_activity_home">Footbal KADE</string>
     <string name="favorites">Favorites</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_team_detail">TeamDetailActivity</string>
+    <string name="title_activity_player_detail">PlayerDetailActivity</string>
+    <string name="match">Match</string>
+    <string name="team">Team</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

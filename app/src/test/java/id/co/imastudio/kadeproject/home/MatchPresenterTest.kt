@@ -13,11 +13,11 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
-class HomePresenterTest {
+class MatchPresenterTest {
 
     @Mock
     private
-    lateinit var view: HomeView
+    lateinit var view: MatchView
 
     @Mock
     private
@@ -27,12 +27,12 @@ class HomePresenterTest {
     private
     lateinit var apiRepository: ApiRepository
 
-    private lateinit var presenter: HomePresenter
+    private lateinit var presenter: MatchPresenter
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = HomePresenter(view, apiRepository, gson, TestContextProvider())
+        presenter = MatchPresenter(view, apiRepository, gson, TestContextProvider())
     }
 
     @Test
@@ -41,11 +41,11 @@ class HomePresenterTest {
         val response = EventsResponse(events)
 
         `when`(gson.fromJson(apiRepository
-                .doRequest(TheSportDBApi.getNextMatch()),
+                .doRequest(TheSportDBApi.getNextMatch(idLeague)),
                 EventsResponse::class.java
         )).thenReturn(response)
 
-        presenter.getNextEvent()
+        presenter.getNextEvent(idLeague)
 
         Mockito.verify(view).showLoading()
         Mockito.verify(view).showMatchList(events)
@@ -60,11 +60,11 @@ class HomePresenterTest {
         val response = EventsResponse(events)
 
         `when`(gson.fromJson(apiRepository
-                .doRequest(TheSportDBApi.getPreviousMatch()),
+                .doRequest(TheSportDBApi.getPreviousMatch(leagueId)),
                 EventsResponse::class.java
         )).thenReturn(response)
 
-        presenter.getPreviousEvent()
+        presenter.getPreviousEvent(leagueName)
 
         Mockito.verify(view).showLoading()
         Mockito.verify(view).showMatchList(events)

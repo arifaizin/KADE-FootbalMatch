@@ -1,46 +1,50 @@
 package id.co.imastudio.kadeproject.home
 
+import android.util.Log.d
 import com.google.gson.Gson
 import id.co.imastudio.kadeproject.api.ApiRepository
 import id.co.imastudio.kadeproject.api.TheSportDBApi
-import id.co.imastudio.kadeproject.model.EventsResponse
+import id.co.imastudio.kadeproject.model.TeamResponse
 import id.co.imastudio.kadeproject.utils.CoroutineContextProvider
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 
-
-class HomePresenter(private val view: HomeView,
+class TeamPresenter(private val view: TeamView,
                     private val apiRepository: ApiRepository,
                     private val gson: Gson,
                     private val context: CoroutineContextProvider = CoroutineContextProvider()) {
 
-    fun getNextEvent() {
+    fun getTeamList(league: String?) {
         view.showLoading()
         async(context.main) {
             val data = bg {
                 gson.fromJson(apiRepository
-                        .doRequest(TheSportDBApi.getNextMatch()),
-                        EventsResponse::class.java
+                        .doRequest(TheSportDBApi.getTeams(league)),
+                        TeamResponse::class.java
                 )
             }
-
+            d("tesdulu", data.await().teams[0].strTeam)
             view.hideLoading()
-            view.showMatchList(data.await().events)
+            view.showTeamList(data.await().teams)
+
         }
     }
 
-    fun getPreviousEvent() {
+    fun searchTeam(query: String) {
+        d("hasilcari","masuk presenter")
+
         view.showLoading()
         async(context.main) {
             val data = bg {
                 gson.fromJson(apiRepository
-                        .doRequest(TheSportDBApi.getPreviousMatch()),
-                        EventsResponse::class.java
+                        .doRequest(TheSportDBApi.searchTeam(query)),
+                        TeamResponse::class.java
                 )
             }
 
+            d("hasilcari",data.await().teams[0].strTeam)
             view.hideLoading()
-            view.showMatchList(data.await().events)
+            view.showTeamList(data.await().teams)
         }
     }
 

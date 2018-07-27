@@ -11,9 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
         <activity android:name=".home.MatchDetailActivity" />
         <activity
             android:name=".home.HomeActivity"
@@ -25,7 +22,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".favorite.FavoriteDetailActivity" />
-
+        <activity android:name=".favorite.FavoriteTeamDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".home.TeamDetailActivity"
+            android:label="@string/title_activity_team_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".player.PlayerDetailActivity"
+            android:label="@string/title_activity_player_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

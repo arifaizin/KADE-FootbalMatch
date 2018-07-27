@@ -1,26 +1,29 @@
-package fragment
+package id.co.imastudio.kadeproject.fragment
 
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import id.co.imastudio.kadeproject.R
-import id.co.imastudio.kadeproject.fragment.FavoriteMatchFragment
-import id.co.imastudio.kadeproject.fragment.FavoriteTeamFragment
+import id.co.imastudio.kadeproject.R.layout.fragment_match
 import kotlinx.android.synthetic.main.fragment_match.*
+import org.jetbrains.anko.support.v4.ctx
 
 
-class FavoriteFragment : Fragment() {
+
+class MatchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_match, container, false)
+
+        return inflater.inflate(fragment_match, container, false)
     }
     private lateinit var pagerAdapter: PagerAdapter
 
@@ -44,24 +47,26 @@ class FavoriteFragment : Fragment() {
     class PagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
         override fun getItem(position: Int): Fragment? {
             when (position) {
-                0 -> return FavoriteMatchFragment()
-                1 -> return FavoriteTeamFragment()
+                0 -> return NextMatchFragment()
+                1 -> return PreviousMatchFragment()
 
                 else -> return null
             }
         }
 
         override fun getCount(): Int {
-            return 2
+            return 2;
         }
 
-        private val tabTitles = arrayOf("Match", "Team")
+        private val tabTitles = arrayOf("Next", "Past")
 
         override fun getPageTitle(position: Int): CharSequence? {
             return tabTitles[position]
         }
 
     }
+
+
 
 }
 

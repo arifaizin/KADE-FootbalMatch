@@ -124,7 +124,7 @@ class MatchDetailActivity : AppCompatActivity() {
             )
 
             uiThread {
-                val linkBadge = data.teams[0].teamBadge
+                val linkBadge = data.teams.get(0).strTeamBadge
                 Picasso.get().load(linkBadge).into(imageView)
             }
         }

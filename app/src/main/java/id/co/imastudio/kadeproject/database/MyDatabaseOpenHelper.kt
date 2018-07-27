@@ -2,9 +2,10 @@ package id.co.imastudio.kadeproject.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import id.co.imastudio.kadeproject.model.Team
 import org.jetbrains.anko.db.*
 
-class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "FavoritesEvent.db", null, 2) {
+class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "FavoritesEvent.db", null, 3) {
     companion object {
         private var instance: MyDatabaseOpenHelper? = null
 
@@ -37,11 +38,25 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
                 Favorite.AWAY_RED to TEXT,
                 Favorite.ID_HOME to TEXT,
                 Favorite.ID_AWAY to TEXT)
+
+        db.createTable(Team.TABLE_TEAM, true,
+                Team.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                Team.TEAM_ID to TEXT + UNIQUE,
+                Team.TEAM_NAME to TEXT,
+                Team.STADIUM to TEXT,
+                Team.TEAM_YEAR to TEXT,
+                Team.DESCRIPTION to TEXT,
+                Team.TEAM_LOGO to TEXT,
+                Team.FANART1 to TEXT,
+                Team.FANART2 to TEXT,
+                Team.FANART3 to TEXT,
+                Team.FANART4 to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Here you can upgrade tables, as usual
         db.dropTable(Favorite.TABLE_FAVORITE, true)
+        db.dropTable(Team.TABLE_TEAM, true)
     }
 }
 

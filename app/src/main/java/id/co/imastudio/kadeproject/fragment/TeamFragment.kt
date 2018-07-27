@@ -12,11 +12,13 @@ import android.view.*
 import android.widget.*
 import com.google.gson.Gson
 import id.co.imastudio.kadeproject.R
+import id.co.imastudio.kadeproject.R.array.league
+import id.co.imastudio.kadeproject.R.color.colorAccent
 import id.co.imastudio.kadeproject.api.ApiRepository
-import id.co.imastudio.kadeproject.home.MatchAdapter
-import id.co.imastudio.kadeproject.home.MatchPresenter
-import id.co.imastudio.kadeproject.home.MatchView
-import id.co.imastudio.kadeproject.model.EventsItem
+import id.co.imastudio.kadeproject.home.TeamAdapter
+import id.co.imastudio.kadeproject.home.TeamPresenter
+import id.co.imastudio.kadeproject.home.TeamView
+import id.co.imastudio.kadeproject.model.Team
 import id.co.imastudio.kadeproject.utils.invisible
 import id.co.imastudio.kadeproject.utils.visible
 import org.jetbrains.anko.*
@@ -25,21 +27,27 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class TeamFragment : Fragment(), AnkoComponent<Context>, TeamView {
 
-/**
- * A simple [Fragment] subclass.
- *
- */
-class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
+    private lateinit var spinner: Spinner
+    private lateinit var leagueName: String
+
+    private lateinit var listTeam: RecyclerView
+    private lateinit var adapter: TeamAdapter
+
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    private var teams: MutableList<Team> = mutableListOf(
+    )
+
+    private lateinit var presenter: TeamPresenter
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-
         setHasOptionsMenu(true)
 
         return createView(AnkoContext.create(ctx))
@@ -55,7 +63,7 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
 
             spinner = spinner()
             swipeRefresh = swipeRefreshLayout {
-                setColorSchemeResources(R.color.colorAccent,
+                setColorSchemeResources(colorAccent,
                         android.R.color.holo_green_light,
                         android.R.color.holo_orange_light,
                         android.R.color.holo_red_light)
@@ -63,8 +71,7 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
                 relativeLayout {
                     lparams(width = matchParent, height = wrapContent)
 
-                    listEvent = recyclerView {
-                        id = R.id.listEvent
+                    listTeam = recyclerView {
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(ctx)
                     }
@@ -79,48 +86,29 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
 
     }
 
-    private lateinit var spinner: Spinner
-    private lateinit var leagueId: String
-
-
-    private lateinit var listEvent: RecyclerView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var swipeRefresh: SwipeRefreshLayout
-
-    private var events: MutableList<EventsItem> = mutableListOf()
-
-    private lateinit var presenter: MatchPresenter
-    private lateinit var adapterMatch: MatchAdapter
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //set adapter
-        adapterMatch = MatchAdapter(events);
-        listEvent.adapter = adapterMatch
+        adapter = TeamAdapter(teams)
+        listTeam.adapter = adapter
 
         //get data
         val request = ApiRepository()
         val gson = Gson()
 
         //init presenter
-        presenter = MatchPresenter(this, request, gson)
-        presenter.getPreviousEvent("4328")
+        presenter = TeamPresenter(this, request, gson)
 
-
-        val spinnerItems = resources.getStringArray(R.array.league)
+        //spinner
+        val spinnerItems = resources.getStringArray(league)
         val spinnerAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
         spinner.adapter = spinnerAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-
-                if (spinner.selectedItemPosition > 4){
-                    leagueId = (4328 + spinner.selectedItemPosition + 1).toString()
-                } else {
-                    leagueId = (4328 + spinner.selectedItemPosition).toString()
-                }
-                presenter.getPreviousEvent(leagueId)
+                leagueName = spinner.selectedItem.toString()
+                presenter.getTeamList(leagueName)
 
             }
 
@@ -128,16 +116,17 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
         }
 
         swipeRefresh.onRefresh {
-            presenter.getPreviousEvent(leagueId)
+            presenter.getTeamList(leagueName)
         }
     }
 
+
     //imp mainView
-    override fun showMatchList(data: List<EventsItem>) {
+    override fun showTeamList(data: List<Team>) {
         swipeRefresh.isRefreshing = false
-        events.clear()
-        events.addAll(data)
-        adapterMatch.notifyDataSetChanged()
+        teams.clear()
+        teams.addAll(data)
+        adapter.notifyDataSetChanged()
     }
 
     override fun showLoading() {
@@ -157,10 +146,12 @@ class PreviousMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
 
         val searchView = menu?.findItem(R.id.searchMenu)?.actionView as SearchView
 
+        searchView.setOnSearchClickListener {
+        }
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    presenter.searchMatch(query)
+                    presenter.searchTeam(query)
                     Log.d("cariawal", query)
                 }
                 return true

@@ -7,17 +7,15 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.util.Log.d
+import android.view.*
+import android.widget.*
 import com.google.gson.Gson
 import id.co.imastudio.kadeproject.R
 import id.co.imastudio.kadeproject.api.ApiRepository
-import id.co.imastudio.kadeproject.home.HomePresenter
-import id.co.imastudio.kadeproject.home.HomeView
 import id.co.imastudio.kadeproject.home.MatchAdapter
+import id.co.imastudio.kadeproject.home.MatchPresenter
+import id.co.imastudio.kadeproject.home.MatchView
 import id.co.imastudio.kadeproject.model.EventsItem
 import id.co.imastudio.kadeproject.utils.invisible
 import id.co.imastudio.kadeproject.utils.visible
@@ -36,11 +34,12 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class NextMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
+class NextMatchFragment : Fragment(), AnkoComponent<Context>, MatchView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         return createView(AnkoContext.create(ctx))
     }
 
@@ -52,7 +51,7 @@ class NextMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
             leftPadding = dip(16)
             rightPadding = dip(16)
 
-//            spinner = spinner()
+            spinner = spinner()
             swipeRefresh = swipeRefreshLayout {
                 setColorSchemeResources(R.color.colorAccent,
                         android.R.color.holo_green_light,
@@ -78,13 +77,16 @@ class NextMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
 
     }
 
+    private lateinit var spinner: Spinner
+    private lateinit var leagueId: String
+    
     private lateinit var listEvent: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private var events: MutableList<EventsItem> = mutableListOf()
 
-    private lateinit var presenter: HomePresenter
+    private lateinit var presenter: MatchPresenter
     private lateinit var adapterMatch: MatchAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -98,11 +100,32 @@ class NextMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
         val gson = Gson()
 
         //init presenter
-        presenter = HomePresenter(this, request, gson)
-        presenter.getNextEvent()
+        presenter = MatchPresenter(this, request, gson)
+        presenter.getNextEvent("4328")
 
+        val spinnerItems = resources.getStringArray(R.array.league)
+        val spinnerAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
+        spinner.adapter = spinnerAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//                leagueName = spinner.selectedItem.toString()
+
+                if (spinner.selectedItemPosition > 4){
+                    leagueId = (4328 + spinner.selectedItemPosition + 1).toString()
+                } else {
+                    leagueId = (4328 + spinner.selectedItemPosition).toString()
+                }
+                presenter.getNextEvent(leagueId)
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+        
+        
         swipeRefresh.onRefresh {
-            presenter.getNextEvent()
+            presenter.getNextEvent(leagueId)
         }
     }
 
@@ -122,4 +145,34 @@ class NextMatchFragment : Fragment(), AnkoComponent<Context>, HomeView {
     override fun hideLoading() {
         progressBar.invisible()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(
+                R.menu.main_menu,
+                menu
+        )
+
+        val searchView = menu?.findItem(R.id.searchMenu)?.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    presenter.searchMatch(query)
+                    d("cariawal", query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                return false
+            }
+        })
+        searchView.setOnCloseListener {
+            progressBar.invisible()
+            false
+        }
+    }
+
 }

@@ -1,12 +1,16 @@
 package id.co.imastudio.kadeproject.home
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.widget.SearchView
+import fragment.FavoriteFragment
 import id.co.imastudio.kadeproject.R
-import id.co.imastudio.kadeproject.fragment.FavoriteFragment
-import id.co.imastudio.kadeproject.fragment.NextMatchFragment
-import id.co.imastudio.kadeproject.fragment.PreviousMatchFragment
+import id.co.imastudio.kadeproject.fragment.MatchFragment
+import id.co.imastudio.kadeproject.fragment.TeamFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
@@ -17,14 +21,14 @@ class HomeActivity : AppCompatActivity() {
 
                 supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.frame_for_fragment, PreviousMatchFragment(), PreviousMatchFragment::class.simpleName)
+                        .replace(R.id.frame_for_fragment, MatchFragment(), MatchFragment::class.simpleName)
                         .commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
                 supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.frame_for_fragment, NextMatchFragment(), NextMatchFragment::class.simpleName)
+                        .replace(R.id.frame_for_fragment, TeamFragment(), TeamFragment::class.simpleName)
                         .commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -45,9 +49,11 @@ class HomeActivity : AppCompatActivity() {
 
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.frame_for_fragment, PreviousMatchFragment(), PreviousMatchFragment::class.simpleName)
+                .replace(R.id.frame_for_fragment, MatchFragment(), MatchFragment::class.simpleName)
                 .commit()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
+
 }

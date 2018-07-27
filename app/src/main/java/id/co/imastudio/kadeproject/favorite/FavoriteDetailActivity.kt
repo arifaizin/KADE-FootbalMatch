@@ -122,7 +122,7 @@ class FavoriteDetailActivity : AppCompatActivity() {
                         TeamResponse::class.java
                 )
             }
-            val linkBadge = data.await().teams.get(0).teamBadge
+            val linkBadge = data.await().teams.get(0).strTeamBadge
             Picasso.get().load(linkBadge).into(imageView)
         }
 }

@@ -2,8 +2,8 @@ package id.co.imastudio.kadeproject.model
 
 import com.google.gson.annotations.SerializedName
 
-data class TeamResponse(
+data class EventResponse(
 
-	@field:SerializedName("teams")
-	val teams: List<Team>
+	@SerializedName("event")
+	val events: List<EventsItem>
 )

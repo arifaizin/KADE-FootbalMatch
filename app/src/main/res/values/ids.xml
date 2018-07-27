@@ -8,4 +8,8 @@
     <item name="match_away_team" type="id" />
     <item name="match_time" type="id" />
     <item name="listEvent" type="id" />
+    <item name="team_overview" type="id" />
+    <item name="player_image" type="id" />
+    <item name="player_name" type="id" />
+    <item name="listTeam" type="id" />
 </resources>
